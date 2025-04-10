@@ -7,7 +7,7 @@
     html, body {
       margin: 0;
       padding: 0;
-      background-color: #000;
+      background: linear-gradient(to top, #0f2027, #203a43, #2c5364);
       color: white;
       font-family: 'Courier New', monospace;
       height: 100vh;
@@ -22,6 +22,16 @@
       font-size: 2em;
       text-align: center;
       margin-bottom: 40px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px #fff;
+      }
+      to {
+        text-shadow: 0 0 20px #ff85c1, 0 0 30px #ff85c1;
+      }
     }
 
     .buttons {
@@ -118,3 +128,4 @@
   </script>
 </body>
 </html>
+
