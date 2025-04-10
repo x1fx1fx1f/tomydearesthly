@@ -10,30 +10,45 @@
       height: 100vh;
       overflow: hidden;
       font-family: 'Courier New', monospace;
-      /* Starry night background from Unsplash */
       background: url("https://source.unsplash.com/1600x900/?starry,night") no-repeat center center fixed;
       background-size: cover;
-      color: white;
+      color: #ff69b4; /* Pink font color */
     }
-    /* Content container to ensure text stays above the canvas */
     #content {
       position: relative;
       z-index: 2;
       width: 100%;
       height: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       text-align: center;
+      padding: 20px;
     }
     h1 {
       font-size: 3em;
-      margin: 0;
-      padding: 20px;
-      /* Text shadow for better readability on a starry background */
+      margin-bottom: 40px;
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
     }
-    /* Fireworks canvas positioned behind the content */
+    .buttons {
+      display: flex;
+      gap: 20px;
+    }
+    button {
+      font-size: 18px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ff69b4;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #ff85c1;
+    }
+    /* Canvas for fireworks behind the content */
     canvas {
       position: fixed;
       top: 0;
@@ -49,9 +64,13 @@
 <body>
   <div id="content">
     <h1>黄栎颖，我们在一起吧。</h1>
+    <div class="buttons">
+      <button onclick="launchFireworks()">yes</button>
+      <button onclick="launchFireworks()">absolutely yes</button>
+    </div>
   </div>
   <canvas id="fireworks"></canvas>
-  
+
   <script>
     const canvas = document.getElementById('fireworks');
     const ctx = canvas.getContext('2d');
@@ -64,26 +83,28 @@
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
 
-    function launchFireworks(x, y) {
-      // If x, y are not provided, pick a random x and a y in the upper half of the screen
-      x = x || Math.random() * canvas.width;
-      y = y || Math.random() * canvas.height * 0.5;
+    function launchFireworks() {
+      // Launch a firework at a random position in the top half of the screen
+      for (let j = 0; j < 5; j++) {
+        let x = Math.random() * canvas.width;
+        let y = Math.random() * canvas.height * 0.5;
+        createFirework(x, y);
+      }
+    }
+
+    function createFirework(x, y) {
+      const colors = ['#ff4b5c', '#ffa502', '#1e90ff', '#2ed573', '#9c88ff'];
       for (let i = 0; i < 100; i++) {
         particles.push({
           x: x,
           y: y,
           radius: Math.random() * 2 + 1,
-          color: getRandomColor(),
+          color: colors[Math.floor(Math.random() * colors.length)],
           angle: Math.random() * 2 * Math.PI,
           speed: Math.random() * 4 + 2,
-          life: 80
+          life: 100
         });
       }
-    }
-
-    function getRandomColor() {
-      const colors = ['#ff4b5c', '#ffa502', '#1e90ff', '#2ed573', '#9c88ff'];
-      return colors[Math.floor(Math.random() * colors.length)];
     }
 
     function animate() {
@@ -94,7 +115,7 @@
         p.x += Math.cos(p.angle) * p.speed;
         p.y += Math.sin(p.angle) * p.speed;
         p.life--;
-        p.radius *= 0.98;  // Gradually reduce the size of the particle
+        p.radius *= 0.98; // shrink particle
 
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
@@ -108,13 +129,7 @@
 
       requestAnimationFrame(animate);
     }
-
     animate();
-
-    // Automatically launch fireworks every 2 seconds
-    setInterval(() => {
-      launchFireworks();
-    }, 2000);
   </script>
 </body>
 </html>
